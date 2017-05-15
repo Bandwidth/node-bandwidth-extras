@@ -28,11 +28,14 @@ async function koa(options) {
 		if (!options.userId || !options.apiToken || !options.apiSecret) {
 			throw new Error('Missing Bandwidth credentials. Please fill middleware options: userId, apiToke and apiSecret');
 		}
+		const getOrCreateApplication = _.memoize(application.getOrCreateApplication, () => `${options.name}##${ctx.host}`);
+		const getOrCreatePhoneNumber = _.memoize(phoneNumber.getOrCreatePhoneNumber, () => ctx.applicationId);
 		ctx.bandwidthApi = new Bandwidth(options);
-		ctx.applicationId = await application.getOrCreateApplication(ctx.bandwidthApi, options.name, ctx.host, util.isUndefined(options.useHttps) ? true : options.useHttps);
-		ctx.phoneNumber = await phoneNumber.getOrCreatePhoneNumber(ctx.bandwidthApi, ctx.applicationId, _.omit(options.phoneNumber, 'phoneType'), options.phoneNumber.phoneType || 'local');
-		if (options.sip) {
-			ctx.domainId = await endpoint.getOrCreateDomain(ctx.bandwidthApi, options.sip.domain);
+		ctx.applicationId = await getOrCreateApplication(ctx.bandwidthApi, options.name, ctx.host, util.isUndefined(options.useHttps) ? true : options.useHttps);
+		ctx.phoneNumber = await getOrCreatePhoneNumber(ctx.bandwidthApi, ctx.applicationId, _.omit(options.phoneNumber, 'phoneType'), options.phoneNumber.phoneType || 'local');
+		if (options.sip && options.sip.domain) {
+			const getOrCreateDomain = _.memoize(endpoint.getOrCreateDomain, () => options.sip.domain);
+			ctx.domainId = await getOrCreateDomain(ctx.bandwidthApi, options.sip.domain);
 			ctx.getOrCreateEndpoint = endpoint.getOrCreateEndpoint.bind(null, ctx.bandwidthApi, ctx.applicationId, ctx.domainId);
 		}
 		const body = (ctx.request || ctx).body;

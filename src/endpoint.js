@@ -24,17 +24,10 @@ async function getDomain(bandwidthApi, name) {
 /**
  * Create or return existing domain by name
  * @param {any} bandwidthApi API instance
- * @param {string} [name] Optional domain name
+ * @param {string} name Domain name
  * @returns Created (or existing) domain id
  */
 async function getOrCreateDomain(bandwidthApi, name) {
-	if (!name) {
-		name = `d${randomstring.generate({
-			length: 15,
-			readable: true,
-			capitalization: 'lowercase'
-		})}`;
-	}
 	let domain = await getDomain(bandwidthApi, name);
 	if (!domain) {
 		debug('Creating new domain %s on Bandwidth', name);

@@ -31,7 +31,7 @@ test('getOrCreateApplication() should return an existing application', async t =
 
 test('getOrCreateApplication() should create an app', async t => {
 	td.when(t.context.api.Application.list({size: 1000})).thenResolve({applications: []});
-	td.when(t.context.api.Application.create({ 
+	td.when(t.context.api.Application.create({
 		incomingMessageUrl: 'https://localhost/bandwidth/callback/message',
 		incomingCallUrl: 'https://localhost/bandwidth/callback/call',
 		autoAnswer: true,
