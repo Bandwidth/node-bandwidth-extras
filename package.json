@@ -1,0 +1,27 @@
+{
+  "name": "node-bandwidth-extra",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^2.6.6",
+    "lodash": "^4.17.4",
+    "node-bandwidth": "^2.3.2",
+    "randomstring": "^1.1.5"
+  },
+  "devDependencies": {
+    "xo": "^0.18.2"
+  },
+  "xo": {
+    "esnext": true,
+    "envs": [
+      "node"
+    ]
+  }
+}
