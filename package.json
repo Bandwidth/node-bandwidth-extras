@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "lint": "xo",
-		"build": "babel src --out-dir lib",
+		"build": "npm run lint && babel src --out-dir lib",
+		"prepublishOnly": "npm run build",
+		"pretest": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "bandwidth",
-    "catatpult"
+    "catapult"
   ],
   "author": "avbel",
   "license": "MIT",
