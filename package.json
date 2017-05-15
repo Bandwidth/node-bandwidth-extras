@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "lint": "xo",
-		"build": "npm run lint && babel src --out-dir lib",
-		"prepublishOnly": "npm run build",
-		"pretest": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run lint && babel src --out-dir lib",
+    "prepublishOnly": "npm run build",
+    "pretest": "npm run build",
+    "test": "ava"
   },
   "keywords": [
     "bandwidth",
@@ -16,10 +16,10 @@
   ],
   "author": "avbel",
   "license": "MIT",
-	"files": [
-		"lib",
-		"index.js"
-	],
+  "files": [
+    "lib",
+    "index.js"
+  ],
   "dependencies": {
     "debug": "^2.6.6",
     "lodash": "^4.17.4",
@@ -27,8 +27,10 @@
     "randomstring": "^1.1.5"
   },
   "devDependencies": {
+    "ava": "^0.19.1",
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "testdouble": "^2.1.2",
     "xo": "^0.18.2"
   },
   "xo": {
