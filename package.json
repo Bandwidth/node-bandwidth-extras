@@ -1,21 +1,28 @@
 {
   "name": "node-bandwidth-extra",
   "version": "1.0.0",
-  "description": "",
+  "description": "Extra functions and middlewares for node-bandwidth",
   "main": "index.js",
   "scripts": {
+    "lint": "xo",
+		"build": "babel src --out-dir lib",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "bandwidth",
+    "catatpult"
+  ],
+  "author": "avbel",
+  "license": "MIT",
   "dependencies": {
     "debug": "^2.6.6",
     "lodash": "^4.17.4",
-    "node-bandwidth": "^2.3.2",
+    "node-bandwidth": "^2.3",
     "randomstring": "^1.1.5"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
     "xo": "^0.18.2"
   },
   "xo": {
