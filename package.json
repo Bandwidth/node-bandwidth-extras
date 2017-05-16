@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "xo",
     "build": "babel src --out-dir lib",
+    "docs": "jsdoc --configure conf.json",
     "prepublishOnly": "npm run lint && npm run build",
     "pretest": "npm run build",
     "test": "ava"
@@ -30,6 +31,9 @@
     "ava": "^0.19.1",
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "jsdoc": "^3.4.3",
+    "jsdoc-strip-async-await": "^0.1.0",
+    "minami": "^1.2.3",
     "testdouble": "^2.1.2",
     "xo": "^0.18.2"
   },
