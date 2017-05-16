@@ -5,7 +5,7 @@
 [![dependencies](https://david-dm.org/Bandwidth/node-bandwidth-extras.svg)](https://david-dm.org/Bandwidth/node-bandwidth-extras)
 [![Known Vulnerabilities](https://snyk.io/package/npm/node-bandwidth-extras/badge.svg)](https://snyk.io/package/npm/node-bandwidth-extras)
 
-Helper functions and middlewares for node-bandwidth
+Helper functions and middlewares for node-bandwidth. Read more documentation [here]().
 
 ## Install
 
