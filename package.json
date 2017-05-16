@@ -9,8 +9,8 @@
     "docs": "jsdoc --configure conf.json",
     "prepublishOnly": "npm run lint && npm run build",
     "pretest": "npm run build",
-    "test": "ava",
-    "test:coverage": "nyc ava"
+    "test": "nyc ava",
+    "ava": "ava"
   },
   "keywords": [
     "bandwidth",
