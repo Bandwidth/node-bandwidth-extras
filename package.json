@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "xo",
-    "build": "npm run lint && babel src --out-dir lib",
-    "prepublishOnly": "npm run build",
+    "build": "babel src --out-dir lib",
+    "prepublishOnly": "npm run lint && npm run build",
     "pretest": "npm run build",
     "test": "ava"
   },

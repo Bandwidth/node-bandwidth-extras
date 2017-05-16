@@ -70,7 +70,7 @@ async function getOrCreateEndpoint(bandwidthApi, applicationId, domainId, sipAcc
 	let sipPassword;
 	if (util.isString(sipAccount)) {
 		sipUserName = sipAccount;
-		sipPassword = randomstring.generate(16);
+		sipPassword = randomstring.generate(16); // Usefull for authorization via token
 	} else {
 		sipUserName = sipAccount.name || sipAccount.userName;
 		sipPassword = sipAccount.password;

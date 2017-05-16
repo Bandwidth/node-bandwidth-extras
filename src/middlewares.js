@@ -23,14 +23,14 @@ async function callbackEvent(callbackHandler, eventData, ctx) {
  * Koa middleware
  * @param {object} options middleware's options
  */
-async function koa(options) {
+function koa(options) {
 	return async (ctx, next) => {
-		if (!options.userId || !options.apiToken || !options.apiSecret) {
-			throw new Error('Missing Bandwidth credentials. Please fill middleware options: userId, apiToke and apiSecret');
+		if (!options.auth) {
+			throw new Error('Missing Bandwidth credentials. Please fill middleware options: auth.userId, auth.apiToken and auth.apiSecret');
 		}
 		const getOrCreateApplication = _.memoize(application.getOrCreateApplication, () => `${options.name}##${ctx.host}`);
 		const getOrCreatePhoneNumber = _.memoize(phoneNumber.getOrCreatePhoneNumber, () => ctx.applicationId);
-		ctx.bandwidthApi = new Bandwidth(options);
+		ctx.bandwidthApi = new Bandwidth(options.auth);
 		ctx.applicationId = await getOrCreateApplication(ctx.bandwidthApi, options.name, ctx.host, util.isUndefined(options.useHttps) ? true : options.useHttps);
 		ctx.phoneNumber = await getOrCreatePhoneNumber(ctx.bandwidthApi, ctx.applicationId, _.omit(options.phoneNumber, 'phoneType'), options.phoneNumber.phoneType || 'local');
 		if (options.sip && options.sip.domain) {
@@ -41,7 +41,7 @@ async function koa(options) {
 		const body = (ctx.request || ctx).body;
 		if (ctx.method === 'POST' && body) {
 			const handleEvent = async (path, handler) => {
-				if (ctx.path === path) {
+				if (ctx.path === path && handler) {
 					if (util.isFunction(handler)) {
 						try {
 							debug(body);
@@ -58,8 +58,9 @@ async function koa(options) {
 				}
 				return false;
 			};
-			if (handleEvent(application.MESSAGE_CALLBACK_PATH, options.messageCallback) ||
-				handleEvent(application.CALL_CALLBACK_PATH, options.callCallback)) {
+			const [messageResult, callResult] = await Promise.all([handleEvent(application.MESSAGE_CALLBACK_PATH, options.messageCallback),
+				handleEvent(application.CALL_CALLBACK_PATH, options.callCallback)]);
+			if (messageResult || callResult)	{
 				ctx.body = '';
 				ctx.sendResponse = '';
 				return;
