@@ -67,7 +67,7 @@ app.use(middlewares.express({
 
 app.use((req, res, next) => {
 	console.log(req .phoneNumber); // calls and messages to this phone number will be handled by this web app
-	await next();
+	next();
 });
 
 ```
