@@ -125,7 +125,34 @@ test('koa() should add route to handle call callbacks (object handlers)', async 
 	t.is(td.explain(callCallback.answer).callCount, 1);
 });
 
-test('koa() should add route to handle call callbacks (object handlers, unhundled event)', async t => {
+test('koa() should add route to handle which handles unhandled errors', async t => {
+	const callCallback = td.function();
+	const middleware = middlewares.koa({
+		name: 'testApp31',
+		auth,
+		phoneNumber: {
+			phoneType: 'local',
+			areaCode: '910'
+		},
+		callCallback: async () => {
+			throw new Error('Error');
+		}
+	});
+	td.when(application.getOrCreateApplication(td.matchers.anything(), 'testApp31', 'localhost', true)).thenResolve('applicationId31');
+	td.when(phoneNumber.getOrCreatePhoneNumber(td.matchers.anything(), 'applicationId31', {areaCode: '910'}, 'local')).thenResolve('+1234567893');
+	t.context.path = application.CALL_CALLBACK_PATH;
+	t.context.method = 'POST';
+	t.context.request = {
+		body: {
+			eventType: 'answer'
+		}
+	};
+	td.when(callCallback({eventType: 'answer'}, t.context)).thenResolve();
+	await middleware(t.context, t.context.next);
+	t.is(t.context.body, '');
+});
+
+test('koa() should add route to handle call callbacks (object handlers, unhandled event)', async t => {
 	const middleware = middlewares.koa({
 		name: 'testApp5',
 		auth,

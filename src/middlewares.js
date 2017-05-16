@@ -15,7 +15,7 @@ async function callbackEvent(callbackHandler, eventData, ctx) {
 			debug('Unhandled event "%s"', eventData.eventType);
 		}
 	}	catch (err) {
-		console.trace(err);
+		debug(err);
 	}
 }
 
@@ -47,7 +47,7 @@ function koa(options) {
 							debug(body);
 							await handler(body, ctx);
 						} catch (err) {
-							console.trace(err);
+							debug(err);
 						}
 						return true;
 					} else if (util.isObject(handler)) {
