@@ -6,6 +6,8 @@ const debug = require('debug')('bandwidth:endpoint');
  * Return list of sip domains
  * @param {any} bandwidthApi API instance
  * @returns list of domains
+ * @example
+ * const domains = await extra.endpoint.listDomains(api);
  */
 async function listDomains(bandwidthApi) {
 	return (await bandwidthApi.Domain.list({size: 100})).domains;
@@ -16,6 +18,8 @@ async function listDomains(bandwidthApi) {
  * @param {any} bandwidthApi API instance
  * @param {string} name domain name
  * @returns domain data or undefined
+ * @example
+ * const domain = await extra.endpoint.getDomain(api, 'your.domain');
  */
 async function getDomain(bandwidthApi, name) {
 	return (await listDomains(bandwidthApi)).filter(d => d.name === name)[0];
@@ -26,6 +30,8 @@ async function getDomain(bandwidthApi, name) {
  * @param {any} bandwidthApi API instance
  * @param {string} name Domain name
  * @returns Created (or existing) domain id
+ * @example
+ * const domainId = await extra.endpoint.getOrCreateDomain(api, 'your.domain'); // domain will be created if need
  */
 async function getOrCreateDomain(bandwidthApi, name) {
 	let domain = await getDomain(bandwidthApi, name);
@@ -41,6 +47,8 @@ async function getOrCreateDomain(bandwidthApi, name) {
  * @param {any} bandwidthApi API instance
  * @param {string} domainId domain id
  * @returns list of endpoints
+ * @example
+ * const endpoints = await extra.endpoint.listEndpoints(api, 'domainId');
  */
 async function listEndpoints(bandwidthApi, domainId) {
 	return (await bandwidthApi.Endpoint.list(domainId, {size: 1000})).endpoints;
@@ -52,6 +60,8 @@ async function listEndpoints(bandwidthApi, domainId) {
  * @param {string} domainId  domain id
  * @param {string} name name of endpoint
  * @returns endpoint data or undefined
+ * @example
+ * const endpoint = await extra.endpoint.getEndpoint(api, 'domainId', 'user1');
  */
 async function getEndpoint(bandwidthApi, domainId, name) {
 	return (await listEndpoints(bandwidthApi, domainId)).filter(e => e.name === name)[0];
@@ -64,6 +74,9 @@ async function getEndpoint(bandwidthApi, domainId, name) {
  * @param {string} domainId  domain id
  * @param {object|string} sipAccount sip account user name as string or object like {name: 'sipAccountName', password: ''}
  * @returns Created (or existing) endpoint data
+ * @example
+ * const endpoint = await extra.endpoint.getOrCreateEndpoint(api, 'applicationId', 'domainId', 'user1');
+ * const endpoint2 = await extra.endpoint.getOrCreateEndpoint(api, 'applicationId', 'domainId', {name: 'user2', password: '111'});
  */
 async function getOrCreateEndpoint(bandwidthApi, applicationId, domainId, sipAccount) {
 	let sipUserName;

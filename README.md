@@ -5,7 +5,7 @@
 [![dependencies](https://david-dm.org/Bandwidth/node-bandwidth-extras.svg)](https://david-dm.org/Bandwidth/node-bandwidth-extras)
 [![Known Vulnerabilities](https://snyk.io/package/npm/node-bandwidth-extras/badge.svg)](https://snyk.io/package/npm/node-bandwidth-extras)
 
-Extra functions and middlewares for node-bandwidth
+Helper functions and middlewares for node-bandwidth
 
 ## Install
 
@@ -16,6 +16,16 @@ npm install node-bandwidth-extras
 ```
 
 ## Examples
+
+### Helpers
+
+```js
+	const {application, phoneNumber} = require("node-bandwidth-extras");
+
+	const appId = await application.getOrCreateApplication(api, 'My app', 'my.domain.com'); // It will return exisitng application Id or create it otherwise
+
+	const phoneNumber = await getOrCreateApplication.getOrCreatePhoneNumber(api, appId, {name: 'Support', areaCode: '910'}); // It will reserve a linked to this app phone number and assign name to it. If number with such name already exists it returns it.
+```
 
 ### Middlewares
 
@@ -69,7 +79,7 @@ app.use(middlewares.express({
 }));
 
 app.use((req, res, next) => {
-	console.log(req .phoneNumber); // calls and messages to this phone number will be handled by this web app
+	console.log(req.phoneNumber); // calls and messages to this phone number will be handled by this web app
 	next();
 });
 

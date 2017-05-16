@@ -6,6 +6,8 @@ const _ = require('lodash');
  * @param {any} bandwidthApi API instance
  * @param {any} applicationId application id
  * @returns list of numbers
+ * @example
+ * const numbers = await extra.phoneNumber.listPhoneNumbers(api, 'applicationId');
  */
 async function listPhoneNumbers(bandwidthApi, applicationId) {
 	return (await bandwidthApi.PhoneNumber.list({size: 1000, applicationId})).phoneNumbers;
@@ -17,6 +19,8 @@ async function listPhoneNumbers(bandwidthApi, applicationId) {
  * @param {any} applicationId  application id
  * @param {string} [name=''] name of phone number
  * @returns phone number data
+ * @example
+ * const number = await extra.phoneNumber.getPhoneNumber(api, 'applicationId', 'support');
  */
 async function getPhoneNumber(bandwidthApi, applicationId, name = '') {
 	return (await bandwidthApi.PhoneNumber.list({size: 1000, applicationId, name})).phoneNumbers[0];
@@ -29,6 +33,8 @@ async function getPhoneNumber(bandwidthApi, applicationId, name = '') {
  * @param {object} options options to create number (property `name` is required)
  * @param {string} [phoneType='local'] type of created phone number
  * @returns allocated phone number
+ * @example
+ * const number = await extra.phoneNumber.createPhoneNumber(api, 'applicationId', {areaCode: '910'});
  */
 async function createPhoneNumber(bandwidthApi, applicationId, options, phoneType = 'local') {
 	debug(`Reserving a phone number for ${applicationId}`);
@@ -45,6 +51,8 @@ async function createPhoneNumber(bandwidthApi, applicationId, options, phoneType
  * @param {object} options options to create number (property `name` is required)
  * @param {string} [phoneType='local'] type of created phone number
  * @returns allocated (or existing) phone number
+ * @example
+ * const number = await extra.phoneNumber.getOrCreatePhoneNumber(api, 'applicationId', {name: 'support', areaCode: '910'});
  */
 async function getOrCreatePhoneNumber(bandwidthApi, applicationId, options, phoneType = 'local') {
 	debug(`Getting phone number for ${applicationId}`);
