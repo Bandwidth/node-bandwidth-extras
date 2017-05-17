@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>phone-number.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createPhoneNumber">createPhoneNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#express">express</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getApplication">getApplication</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getDomain">getDomain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getEndpoint">getEndpoint</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreateApplication">getOrCreateApplication</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreateDomain">getOrCreateDomain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreateEndpoint">getOrCreateEndpoint</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreatePhoneNumber">getOrCreatePhoneNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getPhoneNumber">getPhoneNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#koa">koa</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listApplications">listApplications</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listDomains">listDomains</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listEndpoints">listEndpoints</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listPhoneNumbers">listPhoneNumbers</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">phone-number.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const debug = require('debug')('bandwidth:phoneNumber');
+const _ = require('lodash');
+
+/**
+ * Return list of phone numbers assigned to given application
+ * @param {any} bandwidthApi API instance
+ * @param {any} applicationId application id
+ * @returns list of numbers
+ * @example
+ * const numbers = await extra.phoneNumber.listPhoneNumbers(api, 'applicationId');
+ */
+async function listPhoneNumbers(bandwidthApi, applicationId) {
+	return (await bandwidthApi.PhoneNumber.list({size: 1000, applicationId})).phoneNumbers;
+}
+
+/**
+ * Return a phone number assigned to give application by name
+ * @param {any} bandwidthApi API instance
+ * @param {any} applicationId  application id
+ * @param {string} [name=''] name of phone number
+ * @returns phone number data
+ * @example
+ * const number = await extra.phoneNumber.getPhoneNumber(api, 'applicationId', 'support');
+ */
+async function getPhoneNumber(bandwidthApi, applicationId, name = '') {
+	return (await bandwidthApi.PhoneNumber.list({size: 1000, applicationId, name})).phoneNumbers[0];
+}
+
+/**
+ * Allocate new phone number for the applciation
+ * @param {any} bandwidthApi API instance
+ * @param {string} applicationId application id
+ * @param {object} options options to create number (property `name` is required)
+ * @param {string} [phoneType='local'] type of created phone number
+ * @returns allocated phone number
+ * @example
+ * const number = await extra.phoneNumber.createPhoneNumber(api, 'applicationId', {areaCode: '910'});
+ */
+async function createPhoneNumber(bandwidthApi, applicationId, options, phoneType = 'local') {
+	debug(`Reserving a phone number for ${applicationId}`);
+	const opts = _.omit(_.assign({}, options, {quantity: 1}), 'name');
+	const result = (await bandwidthApi.AvailableNumber.searchAndOrder(phoneType, opts))[0];
+	await bandwidthApi.PhoneNumber.update(result.id, {applicationId, name: options.name});
+	return result.number;
+}
+
+/**
+ * Create new or return existing assigned to the application phone number by name
+ * @param {any} bandwidthApi API instance
+ * @param {string} applicationId application id
+ * @param {object} options options to create number (property `name` is required)
+ * @param {string} [phoneType='local'] type of created phone number
+ * @returns allocated (or existing) phone number
+ * @example
+ * const number = await extra.phoneNumber.getOrCreatePhoneNumber(api, 'applicationId', {name: 'support', areaCode: '910'});
+ */
+async function getOrCreatePhoneNumber(bandwidthApi, applicationId, options, phoneType = 'local') {
+	debug(`Getting phone number for ${applicationId}`);
+	const phoneNumber = await getPhoneNumber(bandwidthApi, applicationId, options.name);
+	if (!phoneNumber) {
+		return createPhoneNumber(bandwidthApi, applicationId, options, phoneType);
+	}
+	debug(`Phone number for ${applicationId} is ${phoneNumber.number}`);
+	return phoneNumber.number;
+}
+
+module.exports = {listPhoneNumbers, createPhoneNumber, getPhoneNumber, getOrCreatePhoneNumber};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed May 17 2017 06:45:33 GMT+0000 (UTC) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

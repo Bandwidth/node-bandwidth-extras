@@ -1,4 +1,45 @@
-const util = require('util');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>middlewares.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createPhoneNumber">createPhoneNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#express">express</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getApplication">getApplication</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getDomain">getDomain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getEndpoint">getEndpoint</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreateApplication">getOrCreateApplication</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreateDomain">getOrCreateDomain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreateEndpoint">getOrCreateEndpoint</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreatePhoneNumber">getOrCreatePhoneNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getPhoneNumber">getPhoneNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#koa">koa</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listApplications">listApplications</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listDomains">listDomains</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listEndpoints">listEndpoints</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listPhoneNumbers">listPhoneNumbers</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">middlewares.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const util = require('util');
 const _ = require('lodash');
 const debug = require('debug')('bandwidth:middlewares');
 const Bandwidth = require('node-bandwidth');
@@ -23,13 +64,13 @@ async function callbackEvent(callbackHandler, eventData, ctx) {
  * @summary Koa middleware
  * @description This middleware will create application instance (or get existing by name) on Bandwidth server and configure callback routes.
  * It adds to koa context next keys:
- * <ul>
- * <li>bandwidthApi - Bandwidth API instance,</li>
- * <li>applicationId - Application Id on Bandwidth server,</li>
- * <li>phoneNumber - reserved phone number which events will be handled by this application (only if options.phoneNumber is defined),</li>
- * <li>domainId - SIP domain Id (only if options.sip.domain is defined),</li>
- * <li>getOrCreateEndpoint(sipAccount) - function to get sip endpoint data by sip account name (it will create new account if it is absent, only if options.sip.domain is defined).</li>
- * </ul>
+ * &lt;ul>
+ * &lt;li>bandwidthApi - Bandwidth API instance,&lt;/li>
+ * &lt;li>applicationId - Application Id on Bandwidth server,&lt;/li>
+ * &lt;li>phoneNumber - reserved phone number which events will be handled by this application,&lt;/li>
+ * &lt;li>domainId - SIP domain Id (only if options.sip.domain is defined),&lt;/li>
+ * &lt;li>getOrCreateEndpoint(sipAccount) - function to get sip endpoint data by sip account name (it will create new account if it is absent, only if options.sip.domain is defined).&lt;/li>
+ * &lt;/ul>
  * @example
  * // Samples of usage of ctx.getOrCreateEndpoint:
  * const endpoint1 = await ctx.getOrCreateEndpoint('sipUser1'); // if enpoint sipUser1 is missing new enpoint will be created with random password
@@ -58,7 +99,7 @@ async function callbackEvent(callbackHandler, eventData, ctx) {
  *	},
  *	callCallback: async (data, ctx) => {
  *		// Handle calls events here
- *		if(data.eventType === 'answer' && ctx.phoneNumber === data.to){
+ *		if(data.eventType === 'answer' &amp;&amp; ctx.phoneNumber === data.to){
  *			console.log('Answered');
  *		}
  *	}
@@ -91,18 +132,16 @@ function koa(options) {
 		const getOrCreatePhoneNumber = _.memoize(phoneNumber.getOrCreatePhoneNumber, () => ctx.applicationId);
 		ctx.bandwidthApi = new Bandwidth(options.auth);
 		ctx.applicationId = await getOrCreateApplication(ctx.bandwidthApi, options.name, ctx.host, util.isUndefined(options.useHttps) ? true : options.useHttps);
-		if (options.phoneNumber) {
-			ctx.phoneNumber = await getOrCreatePhoneNumber(ctx.bandwidthApi, ctx.applicationId, _.omit(options.phoneNumber, 'phoneType'), options.phoneNumber.phoneType || 'local');
-		}
-		if (options.sip && options.sip.domain) {
+		ctx.phoneNumber = await getOrCreatePhoneNumber(ctx.bandwidthApi, ctx.applicationId, _.omit(options.phoneNumber, 'phoneType'), options.phoneNumber.phoneType || 'local');
+		if (options.sip &amp;&amp; options.sip.domain) {
 			const getOrCreateDomain = _.memoize(endpoint.getOrCreateDomain, () => options.sip.domain);
 			ctx.domainId = await getOrCreateDomain(ctx.bandwidthApi, options.sip.domain);
 			ctx.getOrCreateEndpoint = endpoint.getOrCreateEndpoint.bind(null, ctx.bandwidthApi, ctx.applicationId, ctx.domainId);
 		}
 		const body = (ctx.request || ctx).body;
-		if (ctx.method === 'POST' && body) {
+		if (ctx.method === 'POST' &amp;&amp; body) {
 			const handleEvent = async (path, handler) => {
-				if (ctx.path === path && handler) {
+				if (ctx.path === path &amp;&amp; handler) {
 					if (util.isFunction(handler)) {
 						try {
 							debug(body);
@@ -135,13 +174,13 @@ function koa(options) {
  * @summary Express middleware
  * @description This middleware will create application instance (or get existing by name) on Bandwidth server and configure callback routes.
  * It adds to request instance next keys:
- * <ul>
- * <li>bandwidthApi - Bandwidth API instance,</li>
- * <li>applicationId - Application Id on Bandwidth server,</li>
- * <li>phoneNumber - reserved phone number which events will be handled by this application (only if options.phoneNumber is defined),</li>
- * <li>domainId - SIP domain Id (only if options.sip.domain is defined),</li>
- * <li>getOrCreateEndpoint(sipAccount) - function to get sip endpoint data by sip account name (it will create new account if it is absent, only if options.sip.domain is defined).</li>
- * </ul>
+ * &lt;ul>
+ * &lt;li>bandwidthApi - Bandwidth API instance,&lt;/li>
+ * &lt;li>applicationId - Application Id on Bandwidth server,&lt;/li>
+ * &lt;li>phoneNumber - reserved phone number which events will be handled by this application,&lt;/li>
+ * &lt;li>domainId - SIP domain Id (only if options.sip.domain is defined),&lt;/li>
+ * &lt;li>getOrCreateEndpoint(sipAccount) - function to get sip endpoint data by sip account name (it will create new account if it is absent, only if options.sip.domain is defined).&lt;/li>
+ * &lt;/ul>
  * @example
  * // Samples of usage of req.getOrCreateEndpoint:
  * req.getOrCreateEndpoint('sipUser1').then(endpoint => {}); // if enpoint sipUser1 is missing new enpoint will be created with random password
@@ -170,7 +209,7 @@ function koa(options) {
  *	},
  *	callCallback: async (data, ctx) => {
  *		// Handle calls events here
- *		if(data.eventType === 'answer' && ctx.phoneNumber === data.to){
+ *		if(data.eventType === 'answer' &amp;&amp; ctx.phoneNumber === data.to){
  *			console.log('Answered');
  *		}
  *	}
@@ -206,3 +245,22 @@ function express(options) {
 }
 
 module.exports = {koa, express};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed May 17 2017 06:45:33 GMT+0000 (UTC) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

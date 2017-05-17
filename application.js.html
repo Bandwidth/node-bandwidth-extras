@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>application.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading"><a href="global.html">Globals</a></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#createPhoneNumber">createPhoneNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#express">express</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getApplication">getApplication</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getDomain">getDomain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getEndpoint">getEndpoint</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreateApplication">getOrCreateApplication</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreateDomain">getOrCreateDomain</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreateEndpoint">getOrCreateEndpoint</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getOrCreatePhoneNumber">getOrCreatePhoneNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#getPhoneNumber">getPhoneNumber</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#koa">koa</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listApplications">listApplications</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listDomains">listDomains</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listEndpoints">listEndpoints</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="global.html#listPhoneNumbers">listPhoneNumbers</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">application.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const util = require('util');
+const debug = require('debug')('bandwidth:application');
+const _ = require('lodash');
+
+const MESSAGE_CALLBACK_PATH = '/bandwidth/callback/message';
+const CALL_CALLBACK_PATH = '/bandwidth/callback/call';
+
+/**
+ * Return all Bandwidth applications
+ * @param {any} bandwidthApi API instance
+ * @returns list of application
+ * @example
+ * const applications = await extra.application.listApplications(api);
+ */
+async function listApplications(bandwidthApi) {
+	return (await bandwidthApi.Application.list({size: 1000})).applications;
+}
+
+/**
+ * Return Bandwidth application data by name
+ * @param {any} bandwidthApi API instance
+ * @param {string} name application name
+ * @returns application instance or undefined
+ * @example
+ * const application = await extra.application.getApplication(api, 'My App');
+ */
+async function getApplication(bandwidthApi, name) {
+	return (await listApplications(bandwidthApi)).filter(app => app.name === name)[0];
+}
+
+/**
+ * Create or return existing instance (by name) of Bandwidth application
+ * @param {any} bandwidthApi API instance
+ * @param {object|string} options Options to create an application (property `name` is required) or application name (if string)
+ * @param {string} host Host name of web application
+ * @param {boolean} [useHttps=true] Use or not HTTPS for callback routes
+ * @returns Created (or existing) application id
+ * @example
+ * const applicationId = await extra.application.getOrCreateApplication(api, 'Your App', 'your.domain.org');
+ */
+async function getOrCreateApplication(bandwidthApi, options, host, useHttps = true) {
+	debug('Getting Bandwidth application Id');
+	const baseUrl = `http${useHttps ? 's' : ''}://${host}`;
+	if (util.isString(options)) {
+		options = {name: options};
+	}
+	const applicationOptions = _.assign({
+		incomingMessageUrl: `${baseUrl}${MESSAGE_CALLBACK_PATH}`,
+		incomingCallUrl: `${baseUrl}${CALL_CALLBACK_PATH}`,
+		autoAnswer: true,
+		callbackHttpMethod: 'POST'
+	}, options);
+	applicationOptions.name = `${options.name} on ${host}`;
+	let applicationId = (await getApplication(bandwidthApi, applicationOptions.name) || {}).id;
+	if (!applicationId) {
+		debug('Creating new application on Bandwidth');
+		applicationId = (await bandwidthApi.Application.create(applicationOptions)).id;
+	}
+	return applicationId;
+}
+
+module.exports = {listApplications, getApplication, getOrCreateApplication, MESSAGE_CALLBACK_PATH, CALL_CALLBACK_PATH};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed May 17 2017 06:45:33 GMT+0000 (UTC) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
