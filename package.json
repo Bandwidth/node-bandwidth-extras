@@ -7,7 +7,7 @@
     "lint": "xo",
     "build": "babel src --out-dir lib",
     "docs": "jsdoc --configure conf.json",
-    "prepublishOnly": "npm run lint && npm run build",
+    "prepublishOnly": "npm run build && npm run lint",
     "pretest": "npm run build",
     "test": "nyc ava",
     "ava": "ava"
