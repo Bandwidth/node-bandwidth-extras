@@ -5,8 +5,9 @@ SOURCE_BRANCH="master"
 TARGET_BRANCH="gh-pages"
 
 function docGen {
-  npm run docs
-	DOCS_DIR=`find out -name index.html`
+  rm -rf ./out
+	npm run docs
+	DOCS_DIR=`find ./out -name index.html`
 	echo $DOCS_DIR
 	DOCS_DIR=`dirname "$DOCS_DIR"`
 	echo $DOCS_DIR
