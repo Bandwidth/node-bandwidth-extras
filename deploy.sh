@@ -53,7 +53,7 @@ fi
 git add .
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 
-# Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
+# Get the deploy key by using Travis's stored variable
 echo $DEPLOY_KEY | base64 -d > deploy_key
 chmod 600 deploy_key
 eval `ssh-agent -s`
