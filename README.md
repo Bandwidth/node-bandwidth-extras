@@ -12,7 +12,7 @@ Helper functions and middlewares for node-bandwidth. Read more documentation [he
 Run
 
 ```
-npm install node-bandwidth-extras
+npm install @bandwidth/node-bandwidth-extra
 ```
 
 ## Examples
@@ -20,7 +20,7 @@ npm install node-bandwidth-extras
 ### Helpers
 
 ```js
-const {application, phoneNumber} = require("node-bandwidth-extras");
+const {application, phoneNumber} = require("@bandwidth/node-bandwidth-extra");
 
 const appId = await application.getOrCreateApplication(api, 'My app', 'my.domain.com'); // It will return exisitng application Id or create it otherwise
 
@@ -32,7 +32,7 @@ const phoneNumber = await getOrCreateApplication.getOrCreatePhoneNumber(api, app
 #### Koa
 
 ```js
-const {middlewares} = require("node-bandwidth-extras");
+const {middlewares} = require("@bandwidth/node-bandwidth-extra");
 
 const app = new Koa();
 app.use(middlewares.koa({
@@ -60,7 +60,7 @@ app.use(async (ctx, next) => {
 #### Express
 
 ```js
-const {middlewares} = require("node-bandwidth-extras");
+const {middlewares} = require("@bandwidth/node-bandwidth-extra");
 
 const app = express();
 app.use(middlewares.express({
