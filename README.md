@@ -5,7 +5,7 @@
 [![dependencies](https://david-dm.org/Bandwidth/node-bandwidth-extras.svg)](https://david-dm.org/Bandwidth/node-bandwidth-extras)
 [![Known Vulnerabilities](https://snyk.io/package/npm/node-bandwidth-extras/badge.svg)](https://snyk.io/package/npm/node-bandwidth-extras)
 
-Helper functions and middlewares for node-bandwidth. Read more documentation [here]().
+Helper functions and middlewares for node-bandwidth. Read more documentation [here](http://dev.bandwidth.com/node-bandwidth-extras/).
 
 ## Install
 
@@ -20,11 +20,11 @@ npm install node-bandwidth-extras
 ### Helpers
 
 ```js
-	const {application, phoneNumber} = require("node-bandwidth-extras");
+const {application, phoneNumber} = require("node-bandwidth-extras");
 
-	const appId = await application.getOrCreateApplication(api, 'My app', 'my.domain.com'); // It will return exisitng application Id or create it otherwise
+const appId = await application.getOrCreateApplication(api, 'My app', 'my.domain.com'); // It will return exisitng application Id or create it otherwise
 
-	const phoneNumber = await getOrCreateApplication.getOrCreatePhoneNumber(api, appId, {name: 'Support', areaCode: '910'}); // It will reserve a linked to this app phone number and assign name to it. If number with such name already exists it returns it.
+const phoneNumber = await getOrCreateApplication.getOrCreatePhoneNumber(api, appId, {name: 'Support', areaCode: '910'}); // It will reserve a linked to this app phone number and assign name to it. If number with such name already exists it returns it.
 ```
 
 ### Middlewares
