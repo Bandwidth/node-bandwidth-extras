@@ -5,8 +5,10 @@ SOURCE_BRANCH="master"
 TARGET_BRANCH="gh-pages"
 
 function docGen {
-  npm run-script docs
-  mv ./out/node-bandwidth-extra/*/* ./out
+  npm run docs
+	DOCS_DIR=$(dirname $(find ./out -name index.html))
+  mv $DOCS_DIR/* ./out
+	rm -rf ./out/@bandwidth
 }
 NODE_VERSION=`node --version`
 NODE_VERSION=${NODE_VERSION:1:1}
