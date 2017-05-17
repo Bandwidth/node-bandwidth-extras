@@ -6,8 +6,10 @@ TARGET_BRANCH="gh-pages"
 
 function docGen {
   npm run docs
-	DOCS_DIR=`find ./out -name index.html`
+	DOCS_DIR=`find out -name index.html`
+	echo $DOCS_DIR
 	DOCS_DIR=`dirname "$DOCS_DIR"`
+	echo $DOCS_DIR
   mv $DOCS_DIR/* ./out
 	rm -rf ./out/@bandwidth
 }
