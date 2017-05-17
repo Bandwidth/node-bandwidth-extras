@@ -7,9 +7,7 @@ TARGET_BRANCH="gh-pages"
 function docGen {
 	npm run docs
 	DOCS_DIR=`find ./out/@bandwidth -name index.html`
-	echo $DOCS_DIR
 	DOCS_DIR=`dirname "$DOCS_DIR"`
-	echo $DOCS_DIR
   mv $DOCS_DIR/* ./out
 	rm -rf ./out/@bandwidth
 }
@@ -56,11 +54,9 @@ git add .
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 
 # Get the deploy key by using Travis's stored variables to decrypt deploy_key.enc
-ENCRYPTED_KEY_VAR="encrypted_${ENCRYPTION_LABEL}_key"
-ENCRYPTED_IV_VAR="encrypted_${ENCRYPTION_LABEL}_iv"
+ENCRYPTED_KEY_VAR="encrypted_key"
 ENCRYPTED_KEY=${!ENCRYPTED_KEY_VAR}
-ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
-openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in ../deploy_key.enc -out deploy_key -d
+openssl enc -aes-256-cbc -d -in deploy_key.enc -out deploy_key -k $ENCRYPTED_KEY
 chmod 600 deploy_key
 eval `ssh-agent -s`
 ssh-add deploy_key
