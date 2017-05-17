@@ -20,14 +20,27 @@ async function callbackEvent(callbackHandler, eventData, ctx) {
 }
 
 /**
- * Koa middleware
+ * @summary Koa middleware
+ * @description This middleware will create application instance (or get existing by name) on Bandwidth server and configure callback routes.
+ * It adds to koa context next keys:
+ * <ul>
+ * <li>bandwidthApi - Bandwidth API instance,</li>
+ * <li>applicationId - Application Id on Bandwidth server,</li>
+ * <li>phoneNumber - reserved phone number which events will be handled by this application (only if options.phoneNumber is defined),</li>
+ * <li>domainId - SIP domain Id (only if options.sip.domain is defined),</li>
+ * <li>getOrCreateEndpoint(sipAccount) - function to get sip endpoint data by sip account name (it will create new account if it is absent, only if options.sip.domain is defined).</li>
+ * </ul>
+ * @example
+ * // Samples of usage of ctx.getOrCreateEndpoint:
+ * const endpoint1 = await ctx.getOrCreateEndpoint('sipUser1'); // if enpoint sipUser1 is missing new enpoint will be created with random password
+ * const endpoint2 = await ctx.getOrCreateEndpoint({name: 'sipUser1' password: '123456'}); // if enpoint sipUser2 is missing new enpoint will be created with given password
  * @param {object} options middleware's options
  * @param {string} options.name application name on Bandwidth server
  * @param {object} options.auth Auth data fof Bandwidth API
  * @param {string} options.auth.userId User ID
  * @param {string} options.auth.apiToken API token
  * @param {string} options.auth.apiSecret API secret
- * @param {object} options.phoneNumber Options for reserving phone number
+ * @param {object} [options.phoneNumber] Options for reserving phone number. If it is missing no phone number will be reserved.
  * @param {string} [options.phoneNumber.name] Name of reserved phone number
  * @param {string} [options.phoneNumber.phoneType] 'local' or 'tollFree'
  * @param {string} [options.phoneNumber.*] Other options will be passed directly to POST /availableNumbers/local or /availableNumbers/tollFree (see for more details http://dev.bandwidth.com/ap-docs/methods/availableNumbers/postAvailableNumbersLocal.html)
@@ -78,7 +91,9 @@ function koa(options) {
 		const getOrCreatePhoneNumber = _.memoize(phoneNumber.getOrCreatePhoneNumber, () => ctx.applicationId);
 		ctx.bandwidthApi = new Bandwidth(options.auth);
 		ctx.applicationId = await getOrCreateApplication(ctx.bandwidthApi, options.name, ctx.host, util.isUndefined(options.useHttps) ? true : options.useHttps);
-		ctx.phoneNumber = await getOrCreatePhoneNumber(ctx.bandwidthApi, ctx.applicationId, _.omit(options.phoneNumber, 'phoneType'), options.phoneNumber.phoneType || 'local');
+		if (options.phoneNumber) {
+			ctx.phoneNumber = await getOrCreatePhoneNumber(ctx.bandwidthApi, ctx.applicationId, _.omit(options.phoneNumber, 'phoneType'), options.phoneNumber.phoneType || 'local');
+		}
 		if (options.sip && options.sip.domain) {
 			const getOrCreateDomain = _.memoize(endpoint.getOrCreateDomain, () => options.sip.domain);
 			ctx.domainId = await getOrCreateDomain(ctx.bandwidthApi, options.sip.domain);
@@ -117,14 +132,27 @@ function koa(options) {
 }
 
 /**
- * Express middleware
+ * @summary Express middleware
+ * @description This middleware will create application instance (or get existing by name) on Bandwidth server and configure callback routes.
+ * It adds to request instance next keys:
+ * <ul>
+ * <li>bandwidthApi - Bandwidth API instance,</li>
+ * <li>applicationId - Application Id on Bandwidth server,</li>
+ * <li>phoneNumber - reserved phone number which events will be handled by this application (only if options.phoneNumber is defined),</li>
+ * <li>domainId - SIP domain Id (only if options.sip.domain is defined),</li>
+ * <li>getOrCreateEndpoint(sipAccount) - function to get sip endpoint data by sip account name (it will create new account if it is absent, only if options.sip.domain is defined).</li>
+ * </ul>
+ * @example
+ * // Samples of usage of req.getOrCreateEndpoint:
+ * req.getOrCreateEndpoint('sipUser1').then(endpoint => {}); // if enpoint sipUser1 is missing new enpoint will be created with random password
+ * req.getOrCreateEndpoint({name: 'sipUser1' password: '123456'}).then(endpoint => {}); // if enpoint sipUser2 is missing new enpoint will be created with given password
  * @param {object} options middleware's options
  * @param {string} options.name application name on Bandwidth server
  * @param {object} options.auth Auth data fof Bandwidth API
  * @param {string} options.auth.userId User ID
  * @param {string} options.auth.apiToken API token
  * @param {string} options.auth.apiSecret API secret
- * @param {object} options.phoneNumber Options for reserving phone number
+ * @param {object} [options.phoneNumber] Options for reserving phone number. If it is missing no phone number will be reserved.
  * @param {string} [options.phoneNumber.name] Name of reserved phone number
  * @param {string} [options.phoneNumber.phoneType] 'local' or 'tollFree'
  * @param {string} [options.phoneNumber.*] Other options will be passed directly to POST /availableNumbers/local or /availableNumbers/tollFree (see for more details http://dev.bandwidth.com/ap-docs/methods/availableNumbers/postAvailableNumbersLocal.html)

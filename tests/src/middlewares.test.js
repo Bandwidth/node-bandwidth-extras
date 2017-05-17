@@ -47,6 +47,19 @@ test('koa() should fill context by Bandwidth data', async t => {
 	t.falsy(t.context.domainId);
 });
 
+test('koa() should fill context by Bandwidth data (without phone number)', async t => {
+	const middleware = middlewares.koa({
+		name: 'testApp1',
+		auth
+	});
+	td.when(application.getOrCreateApplication(td.matchers.anything(), 'testApp1', 'localhost', true)).thenResolve('applicationId1');
+	await middleware(t.context, t.context.next);
+	t.truthy(t.context.bandwidthApi);
+	t.is(t.context.applicationId, 'applicationId1');
+	t.falsy(t.context.phoneNumber);
+	t.falsy(t.context.domainId);
+});
+
 test('koa() should fill context by Bandwidth data (with SIP)', async t => {
 	const middleware = middlewares.koa({
 		name: 'testApp2',
