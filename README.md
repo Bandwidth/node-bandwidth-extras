@@ -24,7 +24,7 @@ const {application, phoneNumber} = require("@bandwidth/node-bandwidth-extra");
 
 const appId = await application.getOrCreateApplication(api, 'My app', 'my.domain.com'); // It will return exisitng application Id or create it otherwise
 
-const phoneNumber = await getOrCreateApplication.getOrCreatePhoneNumber(api, appId, {name: 'Support', areaCode: '910'}); // It will reserve a linked to this app phone number and assign name to it. If number with such name already exists it returns it.
+const phoneNumber = await phoneNumber.getOrCreatePhoneNumber(api, appId, {name: 'Support', areaCode: '910'}); // It will reserve a linked to this app phone number and assign name to it. If number with such name already exists it returns it.
 ```
 
 ### Middlewares
