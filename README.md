@@ -1,9 +1,9 @@
 # node-bandwidth-extras
 
-[![npm version](https://badge.fury.io/js/node-bandwidth-extras.svg)](https://badge.fury.io/js/node-bandwidth-extras)
+[![npm version](https://badge.fury.io/js/%40bandwidth%2Fnode-bandwidth-extra.svg)](https://badge.fury.io/js/%40bandwidth%2Fnode-bandwidth-extra)
 [![Build Status](https://travis-ci.org/Bandwidth/node-bandwidth-extras.svg?branch=master)](https://travis-ci.org/Bandwidth/node-bandwidth-extras)
 [![dependencies](https://david-dm.org/Bandwidth/node-bandwidth-extras.svg)](https://david-dm.org/Bandwidth/node-bandwidth-extras)
-[![Known Vulnerabilities](https://snyk.io/package/npm/node-bandwidth-extras/badge.svg)](https://snyk.io/test/npm/@bandwidth/node-bandwidth-extra/)
+[![Known Vulnerabilities](https://snyk.io/test/npm/@bandwidth/node-bandwidth-extra/badge.svg)](https://snyk.io/test/npm/@bandwidth/node-bandwidth-extra/)
 
 Helper functions and middlewares for node-bandwidth. Read more documentation [here](http://dev.bandwidth.com/node-bandwidth-extras/).
 
