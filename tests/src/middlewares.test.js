@@ -59,11 +59,11 @@ test('koa() should provide cache manager', async t => {
 	});
 	await middleware(t.context, t.context.next);
 	const cache = t.context.cache;
-	const test = td.function();
-	td.when(test(), {times: 1}).thenResolve(10);
-	const cached1 = await cache.wrap('key', () => test());
-	const cached2 = await cache.wrap('key', () => test());
-	const cached3 = await cache.wrap('key', () => test());
+	const testc = td.function();
+	td.when(testc(), {times: 1}).thenResolve(10);
+	const cached1 = await cache.wrap('key', () => testc());
+	const cached2 = await cache.wrap('key', () => testc());
+	const cached3 = await cache.wrap('key', () => testc());
 	t.is(10, cached1);
 	t.is(10, cached2);
 	t.is(10, cached3);
