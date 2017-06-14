@@ -1,6 +1,4 @@
 const debug = require('debug')('bandwidth:phoneNumber');
-const _ = require('lodash');
-
 /**
  * Return list of phone numbers assigned to given application
  * @param {any} bandwidthApi API instance
@@ -38,7 +36,8 @@ async function getPhoneNumber(bandwidthApi, applicationId, name = '') {
  */
 async function createPhoneNumber(bandwidthApi, applicationId, options, phoneType = 'local') {
 	debug(`Reserving a phone number for ${applicationId}`);
-	const opts = _.omit(_.assign({}, options, {quantity: 1}), 'name');
+	const opts = Object.assign({}, options, {quantity: 1});
+	delete opts.name;
 	const result = (await bandwidthApi.AvailableNumber.searchAndOrder(phoneType, opts))[0];
 	await bandwidthApi.PhoneNumber.update(result.id, {applicationId, name: options.name});
 	return result.number;

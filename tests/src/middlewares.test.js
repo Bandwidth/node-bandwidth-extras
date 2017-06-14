@@ -42,9 +42,31 @@ test('koa() should fill context by Bandwidth data', async t => {
 	td.when(phoneNumber.getOrCreatePhoneNumber(td.matchers.anything(), 'applicationId', {areaCode: '910'}, 'local')).thenResolve('+1234567890');
 	await middleware(t.context, t.context.next);
 	t.truthy(t.context.bandwidthApi);
+	t.truthy(t.context.cache);
 	t.is(t.context.applicationId, 'applicationId');
 	t.is(t.context.phoneNumber, '+1234567890');
 	t.falsy(t.context.domainId);
+});
+
+test('koa() should provide cache manager', async t => {
+	const middleware = middlewares.koa({
+		name: 'testApp',
+		auth,
+		phoneNumber: {
+			phoneType: 'local',
+			areaCode: '910'
+		}
+	});
+	await middleware(t.context, t.context.next);
+	const cache = t.context.cache;
+	const test = td.function();
+	td.when(test(), {times: 1}).thenResolve(10);
+	const cached1 = await cache.wrap('key', () => test());
+	const cached2 = await cache.wrap('key', () => test());
+	const cached3 = await cache.wrap('key', () => test());
+	t.is(10, cached1);
+	t.is(10, cached2);
+	t.is(10, cached3);
 });
 
 test('koa() should fill context by Bandwidth data (without phone number)', async t => {

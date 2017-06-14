@@ -1,6 +1,5 @@
 const util = require('util');
 const debug = require('debug')('bandwidth:application');
-const _ = require('lodash');
 
 const MESSAGE_CALLBACK_PATH = '/bandwidth/callback/message';
 const CALL_CALLBACK_PATH = '/bandwidth/callback/call';
@@ -44,7 +43,7 @@ async function getOrCreateApplication(bandwidthApi, options, host, useHttps = tr
 	if (util.isString(options)) {
 		options = {name: options};
 	}
-	const applicationOptions = _.assign({
+	const applicationOptions = Object.assign({
 		incomingMessageUrl: `${baseUrl}${MESSAGE_CALLBACK_PATH}`,
 		incomingCallUrl: `${baseUrl}${CALL_CALLBACK_PATH}`,
 		autoAnswer: true,

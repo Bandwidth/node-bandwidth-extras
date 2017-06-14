@@ -23,8 +23,8 @@
     "index.js"
   ],
   "dependencies": {
+    "cache-manager": "^2.4.0",
     "debug": "^2.6.6",
-    "lodash": "^4.17.4",
     "node-bandwidth": "^2.3",
     "randomstring": "^1.1.5"
   },
