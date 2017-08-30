@@ -91,8 +91,8 @@ function koa(options) {
 		}
 		ctx.cache = cache;
 		ctx.bandwidthApi = new Bandwidth(options.auth);
-		ctx.applicationId = await cache.wrap(`${options.name}##${ctx.host}`,
-			() => application.getOrCreateApplication(ctx.bandwidthApi, options.name, ctx.host, util.isUndefined(options.useHttps) ? true : options.useHttps));
+		ctx.applicationId = await cache.wrap(`${options.name}##${ctx.hostname}`,
+			() => application.getOrCreateApplication(ctx.bandwidthApi, options.name, ctx.hostname, util.isUndefined(options.useHttps) ? true : options.useHttps));
 		if (options.phoneNumber) {
 			const phoneType = options.phoneNumber.phoneType;
 			delete options.phoneNumber.phoneType;
