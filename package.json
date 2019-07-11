@@ -23,9 +23,9 @@
     "index.js"
   ],
   "dependencies": {
-    "cache-manager": "^2.4.0",
-    "debug": "^2.6.6",
-    "node-bandwidth": "^2.3",
+    "cache-manager": "^2.9.1",
+    "debug": "^2.6.9",
+    "node-bandwidth": "^2.6.5",
     "randomstring": "^1.1.5"
   },
   "devDependencies": {
